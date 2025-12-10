@@ -29,8 +29,8 @@
         }
         
         input[type="range"]::-webkit-slider-track {
-            background: #6b7280; /* 深灰色轨道 */
-            height: 4px;
+            background: #93c5fd; /* 浅蓝色轨道 */
+            height: 8px; /* 变厚 */
             border-radius: 999px;
         }
         
@@ -48,8 +48,8 @@
         }
         
         input[type="range"]::-moz-range-track {
-            background: #6b7280; /* 深灰色轨道 */
-            height: 4px;
+            background: #93c5fd; /* 浅蓝色轨道 */
+            height: 8px; /* 变厚 */
             border-radius: 999px;
         }
         
@@ -62,7 +62,38 @@
             border: 2px solid #ffffff;
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
         }
-    </style>
+    
+/* --- 不同页面使用不同颜色滑块轨道 --- */
+/* Page 1: 周长（蓝色） */
+#side-length::-webkit-slider-track,
+#polygon-sides::-webkit-slider-track {
+    background: #93c5fd; /* 浅蓝 */
+}
+#side-length::-moz-range-track,
+#polygon-sides::-moz-range-track {
+    background: #93c5fd;
+}
+
+/* Page 2: 长方形面积（黄色） */
+#rect-length::-webkit-slider-track,
+#rect-width::-webkit-slider-track {
+    background: #fde68a; /* 浅黄 */
+}
+#rect-length::-moz-range-track,
+#rect-width::-moz-range-track {
+    background: #fde68a;
+}
+
+/* Page 3: 三角形面积（粉红） */
+#tri-base::-webkit-slider-track,
+#tri-height::-webkit-slider-track {
+    background: #f9a8d4; /* 粉红 */
+}
+#tri-base::-moz-range-track,
+#tri-height::-moz-range-track {
+    background: #f9a8d4;
+}
+</style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
@@ -76,7 +107,7 @@
    </header><!-- Navigation -->
    <nav class="bg-white border-b-2 border-gray-100 sticky top-0 z-50 shadow-sm">
     <div class="container mx-auto px-6">
-     <div class="flex justify-center space-x-2"><button onclick="showPage('perimeter')" id="nav-perimeter" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-blue-500 text-white"> 🟦 <span id="nav-title-1">周长</span> </button> <button onclick="showPage('rectangle')" id="nav-rectangle" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300"> 🟨 <span id="nav-title-2">正方形和长方形的面积</span> </button> <button onclick="showPage('triangle')" id="nav-triangle" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300"> 🟥 <span id="nav-title-3">三角形的面积</span> </button>
+     <div class="flex justify-center space-x-2"><button onclick="showPage('perimeter')" id="nav-perimeter" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-blue-500 text-white"> 🟦 <span id="nav-title-1">周长</span> </button> <button onclick="showPage('rectangle')" id="nav-rectangle" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300"> 🟨 <span id="nav-title-2">正方形和长方形</span> </button> <button onclick="showPage('triangle')" id="nav-triangle" class="nav-btn px-8 py-3 font-semibold rounded-t-lg transition-all duration-300 bg-gray-200 text-gray-700 hover:bg-gray-300"> 🟥 <span id="nav-title-3">三角形的面积</span> </button>
      </div>
     </div>
    </nav><!-- Page 1: Perimeter -->
@@ -104,7 +135,7 @@
            <option value="8">八边形 (8边)</option>
            <option value="9">九边形 (9边)</option> <option value="10">十边形 (10边)</option> </select>
          </div>
-         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 边长：<span id="side-length-value" class="text-blue-600">5</span> cm </label> <input type="range" id="side-length" min="1" max="15" value="5" step="0.5" class="w-full">
+         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 边长：<span id="side-length-value" class="text-blue-600">5</span> cm </label> <input type="range" id="side-length" min="1" max="15" value="5" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>1 cm</span> <span>15 cm</span>
           </div>
          </div>
@@ -143,7 +174,7 @@
    <main id="rectangle-page" class="page-content hidden flex-1 py-8">
     <div class="container mx-auto px-6">
      <div class="max-w-5xl mx-auto">
-      <h2 id="page2-heading" class="text-3xl font-bold text-center mb-8 text-yellow-600">正方形和长方形的面积</h2>
+      <h2 id="page2-heading" class="text-3xl font-bold text-center mb-8 text-yellow-600">正方形和长方形</h2>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8"><!-- Visual Display -->
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">图形展示</h3>
@@ -170,11 +201,11 @@
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">参数控制</h3>
         <div class="space-y-6">
-         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 长度：<span id="rect-length-display" class="text-red-600">10</span> cm </label> <input type="range" id="rect-length" min="3" max="20" value="10" step="0.5" class="w-full">
+         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 长度：<span id="rect-length-display" class="text-red-600">10</span> cm </label> <input type="range" id="rect-length" min="3" max="20" value="10" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>3 cm</span> <span>20 cm</span>
           </div>
          </div>
-         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 宽度：<span id="rect-width-display" class="text-blue-600">5</span> cm </label> <input type="range" id="rect-width" min="2" max="15" value="5" step="0.5" class="w-full">
+         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 宽度：<span id="rect-width-display" class="text-blue-600">5</span> cm </label> <input type="range" id="rect-width" min="2" max="15" value="5" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>2 cm</span> <span>15 cm</span>
           </div>
          </div>
@@ -219,7 +250,7 @@
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">三角形展示</h3>
         <div class="flex justify-center mb-6">
          <svg id="triangle-canvas" width="100%" height="320" viewbox="0 0 400 320" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-red-50 to-pink-50"><!-- Triangle --> <polygon id="interactive-triangle" points="50,280 350,280 200,80" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="3" /> <!-- Height line --> <line id="height-line" x1="200" y1="80" x2="200" y2="280" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,5" /> <!-- Base line indicator --> <line x1="50" y1="295" x2="350" y2="295" stroke="#10b981" stroke-width="2" /> <line x1="50" y1="290" x2="50" y2="300" stroke="#10b981" stroke-width="2" /> <line x1="350" y1="290" x2="350" y2="300" stroke="#10b981" stroke-width="2" /> <!-- Labels --> <text id="base-text" x="200" y="315" text-anchor="middle" class="text-base font-bold fill-green-700">
-           底: 15 cm
+           底: 24 cm
           </text> <text id="height-text" x="220" y="180" class="text-base font-bold fill-red-700">
            高: 10 cm
           </text>
@@ -233,11 +264,11 @@
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">参数控制</h3>
         <div class="space-y-6">
-         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 底：<span id="tri-base-display" class="text-green-600">15</span> cm </label> <input type="range" id="tri-base" min="5" max="25" value="15" step="0.5" class="w-full">
+         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 底：<span id="tri-base-display" class="text-green-600">24</span> cm </label> <input type="range" id="tri-base" min="5" max="25" value="24" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>5 cm</span> <span>25 cm</span>
           </div>
          </div>
-         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 高：<span id="tri-height-display" class="text-red-600">10</span> cm </label> <input type="range" id="tri-height" min="3" max="20" value="10" step="0.5" class="w-full">
+         <div><label class="block text-base font-semibold text-gray-700 mb-3"> 高：<span id="tri-height-display" class="text-red-600">10</span> cm </label> <input type="range" id="tri-height" min="3" max="20" value="10" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>3 cm</span> <span>20 cm</span>
           </div>
          </div>
@@ -245,7 +276,7 @@
           <h4 class="font-bold text-pink-800 mb-4 text-lg">实时计算结果</h4>
           <div class="space-y-3">
            <div class="bg-white rounded-lg p-3">
-            <p class="text-gray-700">底：<span id="tri-calc-base" class="font-bold text-green-600">15</span> cm</p>
+            <p class="text-gray-700">底：<span id="tri-calc-base" class="font-bold text-green-600">24</span> cm</p>
            </div>
            <div class="bg-white rounded-lg p-3">
             <p class="text-gray-700">高：<span id="tri-calc-height" class="font-bold text-red-600">10</span> cm</p>
@@ -255,7 +286,7 @@
             <p class="text-xl text-gray-800">面积：<span id="tri-calc-area" class="font-bold text-pink-600 text-2xl">75</span> cm²</p>
            </div>
            <div class="bg-pink-100 rounded-lg p-3 mt-3">
-            <p class="text-sm text-pink-800"><span class="font-semibold">计算过程：</span><br><span id="tri-calculation">15 × 10 ÷ 2 = 75</span></p>
+            <p class="text-sm text-pink-800"><span class="font-semibold">计算过程：</span><br><span id="tri-calculation">24 × 10 ÷ 2 = 120</span></p>
            </div>
           </div>
          </div>
@@ -292,7 +323,7 @@
         const defaultConfig = {
             app_title: "周长与面积",
             page1_title: "周长",
-            page2_title: "正方形和长方形的面积",
+            page2_title: "正方形和长方形",
             page3_title: "三角形的面积"
         };
 
