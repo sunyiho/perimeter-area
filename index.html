@@ -7,93 +7,84 @@
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-        body {
-            box-sizing: border-box;
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.4s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        input[type="range"] {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            background: transparent;
-        }
-        
-        input[type="range"]::-webkit-slider-track {
-            background: #93c5fd; /* 浅蓝色轨道 */
-            height: 8px; /* 变厚 */
-            border-radius: 999px;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 999px;
-            background: #3b82f6;
-            cursor: pointer;
-            margin-top: -6px;
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
-        }
-        
-        input[type="range"]::-moz-range-track {
-            background: #93c5fd; /* 浅蓝色轨道 */
-            height: 8px; /* 变厚 */
-            border-radius: 999px;
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-            width: 16px;
-            height: 16px;
-            border-radius: 999px;
-            background: #3b82f6;
-            cursor: pointer;
-            border: 2px solid #ffffff;
-            box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
-        }
-    
-/* --- 不同页面使用不同颜色滑块轨道 --- */
-/* Page 1: 周长（蓝色） */
-#side-length::-webkit-slider-track,
-#polygon-sides::-webkit-slider-track {
-    background: #93c5fd; /* 浅蓝 */
-}
-#side-length::-moz-range-track,
-#polygon-sides::-moz-range-track {
-    background: #93c5fd;
-}
-
-/* Page 2: 长方形面积（黄色） */
-#rect-length::-webkit-slider-track,
-#rect-width::-webkit-slider-track {
-    background: #fde68a; /* 浅黄 */
-}
-#rect-length::-moz-range-track,
-#rect-width::-moz-range-track {
-    background: #fde68a;
-}
-
-/* Page 3: 三角形面积（粉红） */
-#tri-base::-webkit-slider-track,
-#tri-height::-webkit-slider-track {
-    background: #f9a8d4; /* 粉红 */
-}
-#tri-base::-moz-range-track,
-#tri-height::-moz-range-track {
-    background: #f9a8d4;
-}
-</style>
+    	body {
+    	    box-sizing: border-box;
+    	    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    	}
+    	
+    	.fade-in {
+    	    animation: fadeIn 0.4s ease-in;
+    	}
+    	
+    	@keyframes fadeIn {
+    	    from { opacity: 0; transform: translateY(10px); }
+    	    to { opacity: 1; transform: translateY(0); }
+    	}
+    	
+    	input[type="range"] {
+    	    -webkit-appearance: none;
+    	    appearance: none;
+    	    width: 100%;
+    	    /* input 背景用于承载 JS 动态生成的线性渐变，实现轨道填充效果 */
+    	    background: #e5e7eb; /* 默认浅灰色 (未填充部分) */
+    	    border-radius: 999px;
+    	    height: 8px;
+    	    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    	}
+    	
+    	/* --- 通用滑块轨道样式 (Modern Style) --- */
+    	/* 将伪轨道设置为透明，以显示 input 自身的背景渐变 */
+    	input[type="range"]::-webkit-slider-track {
+    	    background: transparent; 
+    	    height: 8px;
+    	    border-radius: 999px;
+    	}
+    	
+    	/* --- 通用滑块按钮样式 (Modern Style) --- */
+    	input[type="range"]::-webkit-slider-thumb {
+    	    -webkit-appearance: none;
+    	    appearance: none;
+    	    width: 20px; /* 变大 */
+    	    height: 20px; /* 变大 */
+    	    border-radius: 999px;
+    	    /* 滑块颜色使用 JS 动态设置的 CSS 变量 */
+    	    background: var(--slider-color, #3b82f6);
+    	    cursor: pointer;
+    	    /* 8px轨道居中需要 margin-top: 4px - 10px = -6px */
+    	    margin-top: -6px;
+    	    /* 3px 白色边框模拟图片中的高光/外圈效果 */
+    	    border: 3px solid #ffffff; 
+    	    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4); /* 明显的阴影 */
+    	    transition: transform 0.1s ease;
+    	}
+    	
+    	input[type="range"]:focus::-webkit-slider-thumb {
+    	    transform: scale(1.1); /* 焦点放大效果 */
+    	}
+    	
+    	/* --- Firefox 兼容样式 --- */
+    	input[type="range"]::-moz-range-track {
+    	    background: #e5e7eb; /* 浅灰色轨道底座 */
+    	    height: 8px;
+    	    border-radius: 999px;
+    	    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    	}
+    	
+    	input[type="range"]::-moz-range-thumb {
+    	    width: 20px;
+    	    height: 20px;
+    	    border-radius: 999px;
+    	    /* 滑块颜色使用 JS 动态设置的 CSS 变量 */
+    	    background: var(--slider-color, #3b82f6);
+    	    cursor: pointer;
+    	    border: 3px solid #ffffff; 
+    	    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    	}
+    	
+    	/* !!! 移除了页面特定的滑块轨道和滑块边框样式 !!! 
+   	   所有滑块现在都通过 JS 动态实现填充效果。
+    	*/
+    </style>
   <style>@view-transition { navigation: auto; }</style>
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
@@ -119,21 +110,21 @@
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">正多边形展示</h3>
         <div class="flex justify-center mb-6">
-         <svg id="polygon-display" width="280" height="280" viewbox="0 0 280 280" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-blue-50 to-purple-50"><polygon id="display-polygon" points="" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="3" /> <text id="polygon-label" x="140" y="250" text-anchor="middle" class="text-lg font-bold fill-gray-700"></text>
+         <svg id="polygon-display" width="280" height="280" viewbox="0 0 280 280" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-blue-50 to-purple-50"><polygon id="display-polygon" points="" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="3"></polygon> <text id="polygon-label" x="140" y="250" text-anchor="middle" class="text-lg font-bold fill-gray-700"></text>
          </svg>
         </div>
         <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
          <p class="text-center text-gray-700"><span class="font-semibold">周长公式：</span><br>
-           周长 = 边数 × 边长</p>
+          周长 = 边数 × 边长</p>
         </div>
        </div><!-- Perimeter Calculator -->
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">周长计算器</h3>
         <div class="space-y-6">
          <div><label class="block text-base font-semibold text-gray-700 mb-3">选择边数</label> <select id="polygon-sides" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg font-medium focus:border-blue-500 focus:outline-none transition-colors"> <option value="3">三角形 (3边)</option> <option value="4">正方形 (4边)</option> <option value="5">五边形 (5边)</option> <option value="6" selected>六边形 (6边)</option>
-           <option value="7">七边形 (7边)</option>
-           <option value="8">八边形 (8边)</option>
-           <option value="9">九边形 (9边)</option> <option value="10">十边形 (10边)</option> </select>
+          <option value="7">七边形 (7边)</option>
+          <option value="8">八边形 (8边)</option>
+          <option value="9">九边形 (9边)</option> <option value="10">十边形 (10边)</option> </select>
          </div>
          <div><label class="block text-base font-semibold text-gray-700 mb-3"> 边长：<span id="side-length-value" class="text-blue-600">5</span> cm </label> <input type="range" id="side-length" min="1" max="15" value="5" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>1 cm</span> <span>15 cm</span>
@@ -180,7 +171,7 @@
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">图形展示</h3>
         <div class="flex justify-center mb-6">
          <svg width="320" height="280" viewbox="0 0 320 280" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-yellow-50 to-orange-50">
-          <rect id="visual-rect" x="60" y="90" width="200" height="100" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b" stroke-width="3" />
+          <rect id="visual-rect" x="60" y="90" width="200" height="100" fill="#f59e0b" fill-opacity="0.4" stroke="#f59e0b" stroke-width="3"></rect>
           <!-- 长度标签（上方） -->
           
           <!-- 宽度标签（右侧） -->
@@ -190,11 +181,11 @@
         <div class="space-y-3">
          <div class="bg-yellow-50 rounded-lg p-4 border-l-4 border-yellow-500">
           <p class="text-center text-gray-700"><span class="font-semibold">面积公式：</span><br>
-            面积 = 长 × 宽</p>
+           面积 = 长 × 宽</p>
          </div>
          <div class="bg-orange-50 rounded-lg p-4 border-l-4 border-orange-500">
           <p class="text-center text-gray-700"><span class="font-semibold">周长公式：</span><br>
-            周长 = (长 + 宽) × 2</p>
+           周长 = (长 + 宽) × 2</p>
          </div>
         </div>
        </div><!-- Parameter Controls -->
@@ -249,7 +240,7 @@
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">三角形展示</h3>
         <div class="flex justify-center mb-6">
-         <svg id="triangle-canvas" width="100%" height="320" viewbox="0 0 400 320" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-red-50 to-pink-50"><!-- Triangle --> <polygon id="interactive-triangle" points="50,280 350,280 200,80" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="3" /> <!-- Height line --> <line id="height-line" x1="200" y1="80" x2="200" y2="280" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,5" /> <!-- Base line indicator --> <line x1="50" y1="295" x2="350" y2="295" stroke="#10b981" stroke-width="2" /> <line x1="50" y1="290" x2="50" y2="300" stroke="#10b981" stroke-width="2" /> <line x1="350" y1="290" x2="350" y2="300" stroke="#10b981" stroke-width="2" /> <!-- Labels --> <text id="base-text" x="200" y="315" text-anchor="middle" class="text-base font-bold fill-green-700">
+         <svg id="triangle-canvas" width="100%" height="320" viewbox="0 0 400 320" class="border-2 border-gray-200 rounded-xl bg-gradient-to-br from-red-50 to-pink-50"><!-- Triangle --> <polygon id="interactive-triangle" points="50,280 350,280 200,80" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="3"></polygon> <!-- Height line --> <line id="height-line" x1="200" y1="80" x2="200" y2="280" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,5"></line> <!-- Base line indicator -->  <!-- Labels --> <text id="base-text" x="200" y="315" text-anchor="middle" class="text-base font-bold fill-green-700">
            底: 24 cm
           </text> <text id="height-text" x="220" y="180" class="text-base font-bold fill-red-700">
            高: 10 cm
@@ -258,7 +249,7 @@
         </div>
         <div class="bg-red-50 rounded-lg p-4 border-l-4 border-red-500">
          <p class="text-center text-gray-700"><span class="font-semibold">面积公式：</span><br>
-           面积 = 底 × 高 ÷ 2</p>
+          面积 = 底 × 高 ÷ 2</p>
         </div>
        </div><!-- Parameter Controls -->
        <div class="bg-white rounded-2xl shadow-xl p-8">
@@ -300,7 +291,7 @@
          <h4 class="font-bold text-blue-800 mb-3">长方形的面积</h4>
          <p class="text-blue-700 mb-2">长方形面积 = 长 × 宽</p>
          <div class="flex justify-center mt-4">
-          <svg width="120" height="80" viewbox="0 0 120 80"><rect x="10" y="10" width="100" height="60" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="2" />
+          <svg width="120" height="80" viewbox="0 0 120 80"><rect x="10" y="10" width="100" height="60" fill="#3b82f6" fill-opacity="0.3" stroke="#3b82f6" stroke-width="2"></rect>
           </svg>
          </div>
         </div>
@@ -308,7 +299,7 @@
          <h4 class="font-bold text-red-800 mb-3">三角形是长方形的一半</h4>
          <p class="text-red-700 mb-2">三角形面积 = 长方形面积 ÷ 2</p>
          <div class="flex justify-center mt-4">
-          <svg width="120" height="80" viewbox="0 0 120 80"><rect x="10" y="10" width="100" height="60" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,3" /> <polygon points="10,70 110,70 60,10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="2" />
+          <svg width="120" height="80" viewbox="0 0 120 80"><rect x="10" y="10" width="100" height="60" fill="#3b82f6" fill-opacity="0.1" stroke="#3b82f6" stroke-width="1" stroke-dasharray="3,3"></rect> <polygon points="10,70 110,70 60,10" fill="#ef4444" fill-opacity="0.3" stroke="#ef4444" stroke-width="2"></polygon>
           </svg>
          </div>
         </div>
@@ -319,228 +310,262 @@
    </main>
   </div>
   <script>
-        // Configuration
-        const defaultConfig = {
-            app_title: "周长与面积",
-            page1_title: "周长",
-            page2_title: "正方形和长方形",
-            page3_title: "三角形的面积"
-        };
-
-        // Page navigation
-        let currentPage = 'perimeter';
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page-content').forEach(page => {
-                page.classList.add('hidden');
-            });
+    	// Configuration
+    	const defaultConfig = {
+    	    app_title: "周长与面积",
+    	    page1_title: "周长",
+    	    page2_title: "正方形和长方形",
+    	    page3_title: "三角形的面积"
+    	};
+    
+    	// Page navigation
+    	let currentPage = 'perimeter';
+    
+    	function showPage(pageId) {
+    	    document.querySelectorAll('.page-content').forEach(page => {
+    	        page.classList.add('hidden');
+    	    });
+    	    
+    	    document.getElementById(pageId + '-page').classList.remove('hidden');
+    	    
+    	    document.querySelectorAll('.nav-btn').forEach(btn => {
+    	        btn.classList.remove('bg-blue-500', 'bg-yellow-500', 'bg-red-500', 'text-white');
+    	        btn.classList.add('bg-gray-200', 'text-gray-700');
+    	    });
+    	    
+    	    const colors = {
+    	        'perimeter': 'bg-blue-500',
+    	        'rectangle': 'bg-yellow-500',
+    	        'triangle': 'bg-red-500'
+    	    };
+    	    
+    	    const navBtn = document.getElementById('nav-' + pageId);
+    	    navBtn.classList.remove('bg-gray-200', 'text-gray-700');
+    	    navBtn.classList.add(colors[pageId], 'text-white');
+    	    
+    	    currentPage = pageId;
+    	}
+    
+        // NEW FUNCTION: Dynamically styles the slider fill and thumb color
+        function applySliderFill(sliderId, color) {
+            const slider = document.getElementById(sliderId);
+            // Only proceed if it is a range input element
+            if (!slider || slider.type !== 'range') return; 
+        
+            const value = parseFloat(slider.value);
+            const min = parseFloat(slider.min);
+            const max = parseFloat(slider.max);
+            const percent = ((value - min) / (max - min)) * 100;
             
-            document.getElementById(pageId + '-page').classList.remove('hidden');
-            
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.classList.remove('bg-blue-500', 'bg-yellow-500', 'bg-red-500', 'text-white');
-                btn.classList.add('bg-gray-200', 'text-gray-700');
-            });
-            
-            const colors = {
-                'perimeter': 'bg-blue-500',
-                'rectangle': 'bg-yellow-500',
-                'triangle': 'bg-red-500'
-            };
-            
-            const navBtn = document.getElementById('nav-' + pageId);
-            navBtn.classList.remove('bg-gray-200', 'text-gray-700');
-            navBtn.classList.add(colors[pageId], 'text-white');
-            
-            currentPage = pageId;
+            // Set the custom property for the thumb color
+            slider.style.setProperty('--slider-color', color);
+        
+            // Use linear gradient on the input background to simulate the filled track
+            // This creates the colored track up to the thumb, and the light gray track after it.
+            slider.style.background = `linear-gradient(to right, ${color} 0%, ${color} ${percent}%, #e5e7eb ${percent}%, #e5e7eb 100%)`;
         }
 
-        // Page 1: Perimeter functions
-        function updatePolygonDisplay() {
-            const sides = parseInt(document.getElementById('polygon-sides').value);
-            const sideLength = parseFloat(document.getElementById('side-length').value);
-            
-            document.getElementById('side-length-value').textContent = sideLength;
-            document.getElementById('result-sides').textContent = sides;
-            document.getElementById('result-length').textContent = sideLength;
-            
-            const perimeter = sides * sideLength;
-            document.getElementById('result-perimeter').textContent = perimeter.toFixed(1);
-            
-            // 根据边长动态调整正多边形的大小
-            drawPolygon(sides, sideLength);
-            
-            const polygonNames = {
-                3: '三角形',
-                4: '正方形',
-                5: '五边形',
-                6: '六边形',
-                7: '七边形',
-                8: '八边形',
-                9: '九边形',
-                10: '十边形'
-            };
-            document.getElementById('polygon-label').textContent = polygonNames[sides];
-        }
+    	// Page 1: Perimeter functions
+    	function updatePolygonDisplay() {
+    	    const sides = parseInt(document.getElementById('polygon-sides').value);
+    	    const sideLength = parseFloat(document.getElementById('side-length').value);
+    	    
+            // Apply dynamic blue fill for Perimeter page
+            const blueColor = '#3b82f6';
+            applySliderFill('side-length', blueColor);
 
-        function drawPolygon(sides, sideLength) {
-            const centerX = 140;
-            const centerY = 130;
-            // 边长 1～15 映射到半径 40～90，使图形大小随边长变化
-            const minRadius = 40;
-            const maxRadius = 90;
-            const ratio = (sideLength - 1) / (15 - 1);
-            const radius = minRadius + ratio * (maxRadius - minRadius);
-            const points = [];
-            
-            for (let i = 0; i < sides; i++) {
-                const angle = (i * 2 * Math.PI / sides) - Math.PI / 2;
-                const x = centerX + radius * Math.cos(angle);
-                const y = centerY + radius * Math.sin(angle);
-                points.push(`${x},${y}`);
-            }
-            
-            document.getElementById('display-polygon').setAttribute('points', points.join(' '));
-        }
+    	    document.getElementById('side-length-value').textContent = sideLength;
+    	    document.getElementById('result-sides').textContent = sides;
+    	    document.getElementById('result-length').textContent = sideLength;
+    	    
+    	    const perimeter = sides * sideLength;
+    	    document.getElementById('result-perimeter').textContent = perimeter.toFixed(1);
+    	    
+    	    // 根据边长动态调整正多边形的大小
+    	    drawPolygon(sides, sideLength);
+    	    
+    	    const polygonNames = {
+    	        3: '三角形',
+    	        4: '正方形',
+    	        5: '五边形',
+    	        6: '六边形',
+    	        7: '七边形',
+    	        8: '八边形',
+    	        9: '九边形',
+    	        10: '十边形'
+    	    };
+    	    document.getElementById('polygon-label').textContent = polygonNames[sides];
+    	}
+    
+    	function drawPolygon(sides, sideLength) {
+    	    const centerX = 140;
+    	    const centerY = 130;
+    	    // 边长 1～15 映射到半径 40～90，使图形大小随边长变化
+    	    const minRadius = 40;
+    	    const maxRadius = 90;
+    	    const ratio = (sideLength - 1) / (15 - 1);
+    	    const radius = minRadius + ratio * (maxRadius - minRadius);
+    	    const points = [];
+    	    
+    	    for (let i = 0; i < sides; i++) {
+    	        const angle = (i * 2 * Math.PI / sides) - Math.PI / 2;
+    	        const x = centerX + radius * Math.cos(angle);
+    	        const y = centerY + radius * Math.sin(angle);
+    	        points.push(`${x},${y}`);
+    	    }
+    	    
+    	    document.getElementById('display-polygon').setAttribute('points', points.join(' '));
+    	}
+    
+    	// Page 2: Rectangle functions
+    	function updateRectangle() {
+    	    const length = parseFloat(document.getElementById('rect-length').value);
+    	    const width = parseFloat(document.getElementById('rect-width').value);
+    	    
+            // Apply dynamic amber fill for Rectangle page
+            const amberColor = '#f59e0b';
+            applySliderFill('rect-length', amberColor);
+            applySliderFill('rect-width', amberColor);
 
-        // Page 2: Rectangle functions
-        function updateRectangle() {
-            const length = parseFloat(document.getElementById('rect-length').value);
-            const width = parseFloat(document.getElementById('rect-width').value);
-            
-            document.getElementById('rect-length-display').textContent = length;
-            document.getElementById('rect-width-display').textContent = width;
-            document.getElementById('calc-length').textContent = length;
-            document.getElementById('calc-width').textContent = width;
-            
-            const area = length * width;
-            const perimeter = (length + width) * 2;
-            
-            document.getElementById('calc-area').textContent = area.toFixed(1);
-            document.getElementById('calc-perimeter').textContent = perimeter.toFixed(1);
-            
-            updateRectangleVisual(length, width);
-        }
+    	    document.getElementById('rect-length-display').textContent = length;
+    	    document.getElementById('rect-width-display').textContent = width;
+    	    document.getElementById('calc-length').textContent = length;
+    	    document.getElementById('calc-width').textContent = width;
+    	    
+    	    const area = length * width;
+    	    const perimeter = (length + width) * 2;
+    	    
+    	    document.getElementById('calc-area').textContent = area.toFixed(1);
+    	    document.getElementById('calc-perimeter').textContent = perimeter.toFixed(1);
+    	    
+    	    updateRectangleVisual(length, width);
+    	}
+    
+    	function updateRectangleVisual(length, width) {
+    	    // 图形展示与参数控制严格对应：
+    	    // 长度越小，图形水平方向越短；宽度越小，图形垂直方向越短。
+    	    // 使用同一个基准 maxVisualSide，保证当 length === width 时是正方形。
+    	    const maxVisualSide = 200; // 画布中最长边所对应的像素
+    
+    	    const visualWidth = (length / 20) * maxVisualSide; // rect-length 滑杆范围：3～20
+    	    const visualHeight = (width / 20) * maxVisualSide; // rect-width 滑杆范围：2～15，也按 20 缩放，以保持方形一致性
+    	    
+    	    const x = 160 - visualWidth / 2;
+    	    const y = 140 - visualHeight / 2;
+    	    
+    	    const rect = document.getElementById('visual-rect');
+    	    rect.setAttribute('x', x);
+    	    rect.setAttribute('y', y);
+    	    rect.setAttribute('width', visualWidth);
+    	    rect.setAttribute('height', visualHeight);
+    
+    	    // 不再显示「长」「宽」文本标签
+    	}
+    
+    	// Page 3: Triangle functions
+    	function updateTriangleFromSliders() {
+    	    const base = parseFloat(document.getElementById('tri-base').value);
+    	    const height = parseFloat(document.getElementById('tri-height').value);
+    	    
+            // Apply dynamic red fill for Triangle page
+            const redColor = '#ef4444';
+            applySliderFill('tri-base', redColor);
+            applySliderFill('tri-height', redColor);
 
-        function updateRectangleVisual(length, width) {
-            // 图形展示与参数控制严格对应：
-            // 长度越小，图形水平方向越短；宽度越小，图形垂直方向越短。
-            // 使用同一个基准 maxVisualSide，保证当 length === width 时是正方形。
-            const maxVisualSide = 200; // 画布中最长边所对应的像素
-
-            const visualWidth = (length / 20) * maxVisualSide;  // rect-length 滑杆范围：3～20
-            const visualHeight = (width / 20) * maxVisualSide;  // rect-width 滑杆范围：2～15，也按 20 缩放，以保持方形一致性
-            
-            const x = 160 - visualWidth / 2;
-            const y = 140 - visualHeight / 2;
-            
-            const rect = document.getElementById('visual-rect');
-            rect.setAttribute('x', x);
-            rect.setAttribute('y', y);
-            rect.setAttribute('width', visualWidth);
-            rect.setAttribute('height', visualHeight);
-
-            // 不再显示「长」「宽」文本标签
-        }
-
-        // Page 3: Triangle functions
-        function updateTriangleFromSliders() {
-            const base = parseFloat(document.getElementById('tri-base').value);
-            const height = parseFloat(document.getElementById('tri-height').value);
-            
-            document.getElementById('tri-base-display').textContent = base;
-            document.getElementById('tri-height-display').textContent = height;
-            document.getElementById('tri-calc-base').textContent = base;
-            document.getElementById('tri-calc-height').textContent = height;
-            
-            const area = (base * height) / 2;
-            document.getElementById('tri-calc-area').textContent = area.toFixed(1);
-            document.getElementById('tri-calculation').textContent = `${base} × ${height} ÷ 2 = ${area.toFixed(1)}`;
-            
-            // Calculate visual dimensions
-            const pixelBase = (base / 25) * 300;
-            const pixelHeight = (height / 20) * 200;
-            
-            const baseX = 50 + pixelBase;
-            const heightY = 280 - pixelHeight;
-            
-            // Update triangle shape
-            const triangle = document.getElementById('interactive-triangle');
-            const points = `50,280 ${baseX},280 200,${heightY}`;
-            triangle.setAttribute('points', points);
-            
-            // Update height line
-            const heightLine = document.getElementById('height-line');
-            heightLine.setAttribute('y1', heightY);
-            
-            // Update labels
-            document.getElementById('base-text').textContent = `底: ${base} cm`;
-            document.getElementById('height-text').textContent = `高: ${height} cm`;
-        }
-
-        // Element SDK implementation
-        async function onConfigChange(config) {
-            const appTitle = config.app_title || defaultConfig.app_title;
-            const page1Title = config.page1_title || defaultConfig.page1_title;
-            const page2Title = config.page2_title || defaultConfig.page2_title;
-            const page3Title = config.page3_title || defaultConfig.page3_title;
-            
-            document.getElementById('main-title').textContent = appTitle;
-            document.getElementById('nav-title-1').textContent = page1Title;
-            document.getElementById('nav-title-2').textContent = page2Title;
-            document.getElementById('nav-title-3').textContent = page3Title;
-            document.getElementById('page1-heading').textContent = page1Title;
-            document.getElementById('page2-heading').textContent = page2Title;
-            document.getElementById('page3-heading').textContent = page3Title;
-        }
-
-        function mapToEditPanelValues(config) {
-            return new Map([
-                ["app_title", config.app_title || defaultConfig.app_title],
-                ["page1_title", config.page1_title || defaultConfig.page1_title],
-                ["page2_title", config.page2_title || defaultConfig.page2_title],
-                ["page3_title", config.page3_title || defaultConfig.page3_title]
-            ]);
-        }
-
-        function mapToCapabilities(config) {
-            return {
-                recolorables: [],
-                borderables: [],
-                fontEditable: undefined,
-                fontSizeable: undefined
-            };
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function() {
-            // Page 1 listeners
-            document.getElementById('polygon-sides').addEventListener('change', updatePolygonDisplay);
-            document.getElementById('side-length').addEventListener('input', updatePolygonDisplay);
-            
-            // Page 2 listeners
-            document.getElementById('rect-length').addEventListener('input', updateRectangle);
-            document.getElementById('rect-width').addEventListener('input', updateRectangle);
-            
-            // Page 3 listeners
-            document.getElementById('tri-base').addEventListener('input', updateTriangleFromSliders);
-            document.getElementById('tri-height').addEventListener('input', updateTriangleFromSliders);
-            
-            // Initialize displays
-            updatePolygonDisplay();
-            updateRectangle();
-            updateTriangleFromSliders();
-        });
-
-        // Initialize Element SDK
-        if (window.elementSdk) {
-            window.elementSdk.init({
-                defaultConfig,
-                onConfigChange,
-                mapToCapabilities,
-                mapToEditPanelValues
-            });
-        }
+    	    document.getElementById('tri-base-display').textContent = base;
+    	    document.getElementById('tri-height-display').textContent = height;
+    	    document.getElementById('tri-calc-base').textContent = base;
+    	    document.getElementById('tri-calc-height').textContent = height;
+    	    
+    	    const area = (base * height) / 2;
+    	    document.getElementById('tri-calc-area').textContent = area.toFixed(1);
+    	    document.getElementById('tri-calculation').textContent = `${base} × ${height} ÷ 2 = ${area.toFixed(1)}`;
+    	    
+    	    // Calculate visual dimensions
+    	    const pixelBase = (base / 25) * 300;
+    	    const pixelHeight = (height / 20) * 200;
+    	    
+    	    const baseX = 50 + pixelBase;
+    	    const heightY = 280 - pixelHeight;
+    	    
+    	    // Update triangle shape
+    	    const triangle = document.getElementById('interactive-triangle');
+    	    const points = `50,280 ${baseX},280 200,${heightY}`;
+    	    triangle.setAttribute('points', points);
+    	    
+    	    // Update height line
+    	    const heightLine = document.getElementById('height-line');
+    	    heightLine.setAttribute('y1', heightY);
+    	    
+    	    // Update labels
+    	    document.getElementById('base-text').textContent = `底: ${base} cm`;
+    	    document.getElementById('height-text').textContent = `高: ${height} cm`;
+    	}
+    
+    	// Element SDK implementation
+    	async function onConfigChange(config) {
+    	    const appTitle = config.app_title || defaultConfig.app_title;
+    	    const page1Title = config.page1_title || defaultConfig.page1_title;
+    	    const page2Title = config.page2_title || defaultConfig.page2_title;
+    	    const page3Title = config.page3_title || defaultConfig.page3_title;
+    	    
+    	    document.getElementById('main-title').textContent = appTitle;
+    	    document.getElementById('nav-title-1').textContent = page1Title;
+    	    document.getElementById('nav-title-2').textContent = page2Title;
+    	    document.getElementById('nav-title-3').textContent = page3Title;
+    	    document.getElementById('page1-heading').textContent = page1Title;
+    	    document.getElementById('page2-heading').textContent = page2Title;
+    	    document.getElementById('page3-heading').textContent = page3Title;
+    	}
+    
+    	function mapToEditPanelValues(config) {
+    	    return new Map([
+    	        ["app_title", config.app_title || defaultConfig.app_title],
+    	        ["page1_title", config.page1_title || defaultConfig.page1_title],
+    	        ["page2_title", config.page2_title || defaultConfig.page2_title],
+    	        ["page3_title", config.page3_title || defaultConfig.page3_title]
+    	    ]);
+    	}
+    
+    	function mapToCapabilities(config) {
+    	    return {
+    	        recolorables: [],
+    	        borderables: [],
+    	        fontEditable: undefined,
+    	        fontSizeable: undefined
+    	    };
+    	}
+    
+    	// Initialize
+    	document.addEventListener('DOMContentLoaded', function() {
+    	    // Page 1 listeners
+    	    document.getElementById('polygon-sides').addEventListener('change', updatePolygonDisplay);
+    	    document.getElementById('side-length').addEventListener('input', updatePolygonDisplay);
+    	    
+    	    // Page 2 listeners
+    	    document.getElementById('rect-length').addEventListener('input', updateRectangle);
+    	    document.getElementById('rect-width').addEventListener('input', updateRectangle);
+    	    
+    	    // Page 3 listeners
+    	    document.getElementById('tri-base').addEventListener('input', updateTriangleFromSliders);
+    	    document.getElementById('tri-height').addEventListener('input', updateTriangleFromSliders);
+    	    
+    	    // Initialize displays
+    	    updatePolygonDisplay();
+    	    updateRectangle();
+    	    updateTriangleFromSliders();
+    	});
+    
+    	// Initialize Element SDK
+    	if (window.elementSdk) {
+    	    window.elementSdk.init({
+    	        defaultConfig,
+    	        onConfigChange,
+    	        mapToCapabilities,
+    	        mapToEditPanelValues
+    	    });
+    	}
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ab948f5b487cf0c',t:'MTc2NTMzMzQ1Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ </body>
 </html>
+
