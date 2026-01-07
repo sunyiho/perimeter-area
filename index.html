@@ -121,10 +121,10 @@
        <div class="bg-white rounded-2xl shadow-xl p-8">
         <h3 class="text-xl font-semibold mb-6 text-center text-gray-800">周长计算器</h3>
         <div class="space-y-6">
-         <div><label class="block text-base font-semibold text-gray-700 mb-3">选择边数</label> <select id="polygon-sides" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg font-medium focus:border-blue-500 focus:outline-none transition-colors"> <option value="3">三角形 (3边)</option> <option value="4">正方形 (4边)</option> <option value="5">五边形 (5边)</option> <option value="6" selected>六边形 (6边)</option>
-          <option value="7">七边形 (7边)</option>
-          <option value="8">八边形 (8边)</option>
-          <option value="9">九边形 (9边)</option> <option value="10">十边形 (10边)</option> </select>
+         <div><label class="block text-base font-semibold text-gray-700 mb-3">选择边数</label> <select id="polygon-sides" class="w-full p-3 border-2 border-gray-300 rounded-lg text-lg font-medium focus:border-blue-500 focus:outline-none transition-colors"> <option value="3">正三角形 (3边)</option> <option value="4">正方形 (4边)</option> <option value="5">正五边形 (5边)</option> <option value="6" selected>正六边形 (6边)</option>
+          <option value="7">正七边形 (7边)</option>
+          <option value="8">正八边形 (8边)</option>
+        </select>
          </div>
          <div><label class="block text-base font-semibold text-gray-700 mb-3"> 边长：<span id="side-length-value" class="text-blue-600">5</span> cm </label> <input type="range" id="side-length" min="1" max="15" value="5" step="1" class="w-full">
           <div class="flex justify-between text-sm text-gray-500 mt-1"><span>1 cm</span> <span>15 cm</span>
@@ -385,14 +385,12 @@
     	    drawPolygon(sides, sideLength);
     	    
     	    const polygonNames = {
-    	        3: '三角形',
+    	        3: '正三角形',
     	        4: '正方形',
-    	        5: '五边形',
-    	        6: '六边形',
-    	        7: '七边形',
-    	        8: '八边形',
-    	        9: '九边形',
-    	        10: '十边形'
+    	        5: '正五边形',
+    	        6: '正六边形',
+    	        7: '正七边形',
+    	        8: '正八边形'
     	    };
     	    document.getElementById('polygon-label').textContent = polygonNames[sides];
     	}
